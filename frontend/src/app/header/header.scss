@@ -1,0 +1,255 @@
+$red:       #e2001a;
+$red-dark:  #b8001a;
+$white:     #ffffff;
+$gray-50:   #f9fafb;
+$gray-100:  #f3f4f6;
+$gray-400:  #9ca3af;
+$gray-600:  #4b5563;
+$gray-900:  #111827;
+
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Sora', sans-serif;
+}
+
+.app-header {
+  background: $white;
+  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 4px 20px rgba(0,0,0,.07);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-accent {
+  height: 3px;
+  background: $red;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 68px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+// ── Gauche ────────────────────────────────────────────────────────────────────
+.header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.mt-logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+// ── Centre : ARP ──────────────────────────────────────────────────────────────
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.arp-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// Grille 2x2
+.arp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.arp-cell {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+
+  &--light { background: $red; }
+  &--dark  { background: $red-dark; }
+}
+
+.arp-letter {
+  font-size: 11px;
+  font-weight: 800;
+  color: $white;
+  line-height: 1;
+  font-family: 'Sora', sans-serif;
+}
+
+.arp-arrow {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+// Texte ARP
+.arp-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.arp-line {
+  font-size: 11px;
+  font-weight: 600;
+  color: $gray-900;
+  white-space: nowrap;
+  line-height: 1.5;
+
+  &--top    { color: $gray-900; }
+  &--bottom { color: $gray-600; font-weight: 400; }
+}
+
+.arp-separator {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 1px 0;
+}
+
+// ── Droite : profil ───────────────────────────────────────────────────────────
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border: 1.5px solid transparent;
+
+  &:hover {
+    background: $gray-100;
+    border-color: #efefef;
+  }
+
+  .profile-menu.open & {
+    background: $gray-100;
+    border-color: #e5e7eb;
+  }
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: $red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  span {
+    font-size: 13px;
+    font-weight: 700;
+    color: $white;
+    letter-spacing: 0.5px;
+  }
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-greeting {
+  font-size: 10px;
+  font-weight: 500;
+  color: $gray-400;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1;
+}
+
+.profile-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $gray-900;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: $gray-400;
+  transition: transform 0.22s ease;
+  flex-shrink: 0;
+
+  .profile-menu.open & {
+    transform: rotate(180deg);
+  }
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: $white;
+  border: 1px solid #efefef;
+  border-radius: 14px;
+  padding: 6px;
+  min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.10);
+  animation: dropIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  z-index: 200;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background 0.15s ease;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  &.logout {
+    color: $red;
+    svg { stroke: $red; }
+    &:hover { background: #fff1f2; }
+  }
+}

@@ -1,0 +1,114 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-card">
+
+    <div class="dashboard-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="dashboard-title">Tableau de bord Admin</h1>
+    <p class="dashboard-subtitle">Bienvenue sur le portail ARP</p>
+
+    <div class="actions-grid">
+
+      <button class="action-btn teal" (click)="goToSuiviProduction()">
+        <div class="btn-icon-wrapper teal">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Suivi Production</span>
+          <span class="btn-desc">FC Livrées, DI Livrées...</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn primary" (click)="goToExport()">
+        <div class="btn-icon-wrapper primary">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Export PV Production</span>
+          <span class="btn-desc">Générer un fichier Excel</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn accent" (click)="goToEntites()">
+        <div class="btn-icon-wrapper accent">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Gérer les entités</span>
+          <span class="btn-desc">Ajouter, modifier, supprimer</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn green" (click)="goToUsers()">
+        <div class="btn-icon-wrapper green">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Gérer les comptes</span>
+          <span class="btn-desc">Utilisateurs et rôles</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn purple" (click)="goToProfile()">
+        <div class="btn-icon-wrapper purple">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Mon compte</span>
+          <span class="btn-desc">Modifier mes informations</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button class="action-btn amber" (click)="goToAgentIa()">
+        <div class="btn-icon-wrapper amber">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2v4"/>
+            <path d="M12 18v4"/>
+            <path d="M4.93 4.93l2.83 2.83"/>
+            <path d="M16.24 16.24l2.83 2.83"/>
+            <path d="M2 12h4"/>
+            <path d="M18 12h4"/>
+            <path d="M4.93 19.07l2.83-2.83"/>
+            <path d="M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Agent IA</span>
+          <span class="btn-desc">Statistiques et analyse des tickets</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>

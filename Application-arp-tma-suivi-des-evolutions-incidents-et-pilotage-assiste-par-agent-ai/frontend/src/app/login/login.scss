@@ -1,0 +1,313 @@
+// ── Host ──────────────────────────────────────────────────────────────────────
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background: #f8f8f8;
+  font-family: 'Sora', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+// ── Background décoratif ──────────────────────────────────────────────────────
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  .blob {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: #e2001a;
+    filter: blur(90px);
+    opacity: 0.07;
+    top: -180px;
+    right: -150px;
+    animation: floatBlob 12s ease-in-out infinite alternate;
+  }
+
+  .arc {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(226, 0, 26, 0.07);
+
+    &:nth-child(2) { width: 780px; height: 780px; top: -240px; right: -240px; }
+    &:nth-child(3) { width: 560px; height: 560px; top: -100px; right: -100px; }
+    &:nth-child(4) { width: 340px; height: 340px; top:   50px; right:   50px; }
+  }
+}
+
+@keyframes floatBlob {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, -40px) scale(1.06); }
+}
+
+// ── Wrapper & Card ────────────────────────────────────────────────────────────
+.login-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px 40px 36px;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.04),
+    0 20px 60px rgba(226, 0, 26, 0.11);
+  animation: slideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Logo ──────────────────────────────────────────────────────────────────────
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+.brand-logo {
+  height: 65px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+// ── Divider sous le logo ──────────────────────────────────────────────────────
+.brand-divider {
+  width: 44px;
+  height: 3px;
+  background: #e2001a;
+  border-radius: 4px;
+  margin: 20px 0 24px 0;
+}
+
+// ── Titre ─────────────────────────────────────────────────────────────────────
+.login-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  font-size: 13.5px;
+  color: #9ca3af;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+
+// ── Erreur ────────────────────────────────────────────────────────────────────
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-left: 3px solid #e2001a;
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #be123c;
+  font-weight: 500;
+  animation: shake 0.4s ease;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    stroke: #be123c;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(3px); }
+}
+
+// ── Champs ────────────────────────────────────────────────────────────────────
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.field {
+  label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #4b5563;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .field-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .field-icon {
+    position: absolute;
+    left: 13px;
+    width: 16px;
+    height: 16px;
+    stroke: #9ca3af;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    pointer-events: none;
+    transition: stroke 0.22s ease;
+    z-index: 1;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 13px 12px 40px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    color: #111827;
+    background: #f9f9f9;
+    border: 1.5px solid #efefef;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.22s ease;
+
+    &::placeholder { color: #c4c4c4; }
+
+    &:hover {
+      border-color: #e5e7eb;
+      background: #fafafa;
+    }
+
+    &:focus {
+      background: #fff;
+      border-color: #e2001a;
+      box-shadow: 0 0 0 4px rgba(226, 0, 26, 0.08);
+    }
+  }
+
+  &:focus-within .field-icon {
+    stroke: #e2001a;
+  }
+}
+
+// ── Mot de passe oublié ───────────────────────────────────────────────────────
+.forgot-link {
+  display: block;
+  text-align: right;
+  margin-bottom: 24px;
+  font-size: 12.5px;
+  color: #e2001a;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.7; }
+}
+
+// ── Bouton ────────────────────────────────────────────────────────────────────
+.btn-connect {
+  width: 100%;
+  padding: 13.5px;
+  font-family: 'Sora', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #fff;
+  background: #e2001a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+    transition: left 0.5s ease;
+  }
+
+  &:hover {
+    background: #b8001a;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(226, 0, 26, 0.32);
+
+    &::before { left: 160%; }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+// ── Badge ARP ─────────────────────────────────────────────────────────────────
+.arp-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f8f8;
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 24px;
+
+  .arp-letters {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+
+    span {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: #e2001a;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .arp-label {
+    font-size: 11px;
+    color: #4b5563;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+}

@@ -1,0 +1,84 @@
+<!-- header.html -->
+<header class="app-header">
+  <div class="header-accent"></div>
+
+  <div class="header-inner">
+
+    <!-- ── Gauche : Logo Maroc Telecom ── -->
+    <div class="header-left">
+      <img
+        src="images/logo-telcom.png"
+        alt="Maroc Telecom"
+        class="mt-logo"
+      />
+    </div>
+
+    <!-- ── Centre : Logo ARP fidèle ── -->
+    <div class="header-center">
+      <div class="arp-logo">
+
+        <!-- Grille 2x2 -->
+        <div class="arp-grid">
+          <!-- Ligne 1 -->
+          <div class="arp-cell arp-cell--light">
+            <span class="arp-letter">A</span>
+          </div>
+          <div class="arp-cell arp-cell--dark">
+            <span class="arp-letter">R</span>
+          </div>
+          <!-- Ligne 2 -->
+          <div class="arp-cell arp-cell--dark">
+            <svg class="arp-arrow" viewBox="0 0 16 16" fill="none">
+              <path d="M2 14L13 3M13 3H6M13 3V10"
+                    stroke="white" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="arp-cell arp-cell--light">
+            <span class="arp-letter">P</span>
+          </div>
+        </div>
+
+        <!-- Texte à droite -->
+        <div class="arp-text">
+          <span class="arp-line arp-line--top">Avancement en temps Réel</span>
+          <div class="arp-separator"></div>
+          <span class="arp-line arp-line--bottom">de la Production TMA SIC</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Droite : Profil ── -->
+    <div class="header-right">
+      <div class="profile-menu" (click)="toggleDropdown()" [class.open]="dropdownOpen">
+
+        <div class="profile-trigger">
+          <div class="avatar">
+            <span>{{ getUserInitials() }}</span>
+          </div>
+          <div class="profile-info">
+            <span class="profile-greeting">Bienvenue</span>
+            <span class="profile-name">{{ userName }}</span>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="profile-dropdown" *ngIf="dropdownOpen">
+          <button class="dropdown-item logout" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Se déconnecter
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</header>

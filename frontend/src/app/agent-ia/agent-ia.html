@@ -1,0 +1,129 @@
+<div class="agent-page">
+
+  <header class="page-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2.5c.6 3.2 1.4 5.3 2.7 6.6 1.3 1.3 3.4 2.1 6.6 2.7-3.2.6-5.3 1.4-6.6 2.7-1.3 1.3-2.1 3.4-2.7 6.6-.6-3.2-1.4-5.3-2.7-6.6C7.9 12.9 5.8 12.1 2.6 11.5c3.2-.6 5.3-1.4 6.6-2.7 1.3-1.3 2.1-3.4 2.7-6.6z"/>
+        <path d="M19 3l.5 1.5L21 5l-1.5.5L19 7l-.5-1.5L17 5l1.5-.5z"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Agent IA</h1>
+      <p>Analyse en continu des tickets par entité</p>
+    </div>
+    <div class="live-badge">
+      <span class="dot"></span>
+      Connecté
+    </div>
+  </header>
+
+  <!-- KPI STRIP -->
+  <section class="kpi-strip" *ngIf="!statsLoading; else statsSkeleton">
+    <div class="kpi-card" *ngFor="let s of stats">
+      <div class="kpi-card-top">
+        <span class="kpi-entite">{{ s.entite }}</span>
+        <span class="kpi-badge" [ngClass]="healthClass(s.pourcentageLivrees)">
+          {{ s.pourcentageLivrees }}%
+        </span>
+      </div>
+
+      <div class="kpi-number">{{ s.enCours }}</div>
+      <div class="kpi-label">tickets en cours</div>
+
+      <div class="kpi-bar">
+        <span class="seg seg-encours" [style.width.%]="segmentWidth(s.enCours, s.total)"></span>
+        <span class="seg seg-di" [style.width.%]="segmentWidth(s.diLivrees, s.total)"></span>
+        <span class="seg seg-fc" [style.width.%]="segmentWidth(s.fcLivrees, s.total)"></span>
+        <span class="seg seg-annule" [style.width.%]="segmentWidth(s.annulees, s.total)"></span>
+      </div>
+
+      <div class="kpi-legend">
+        <span><i class="dot seg-encours"></i>{{ s.enCours }} encours</span>
+        <span><i class="dot seg-di"></i>{{ s.diLivrees }} DI</span>
+        <span><i class="dot seg-fc"></i>{{ s.fcLivrees }} FC</span>
+        <span><i class="dot seg-annule"></i>{{ s.annulees }} annulé</span>
+      </div>
+    </div>
+  </section>
+
+  <ng-template #statsSkeleton>
+    <section class="kpi-strip">
+      <div class="kpi-card skeleton" *ngFor="let i of [1,2,3,4]"></div>
+    </section>
+  </ng-template>
+
+  <!-- AI INSIGHT -->
+  <section class="insight-card">
+    <div class="insight-header">
+      <div class="insight-title">
+        <svg viewBox="0 0 24 24" class="spark">
+          <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
+        </svg>
+        <span>Analyse de l'agent</span>
+      </div>
+      <button class="refresh-btn" (click)="loadSummary()" [disabled]="summaryLoading">
+        <svg viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      </button>
+    </div>
+
+    <div class="insight-body">
+      <div *ngIf="summaryLoading" class="thinking">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        Analyse des données en cours...
+      </div>
+
+      <div *ngIf="summaryError" class="alert alert-error">{{ summaryError }}</div>
+
+      <p *ngIf="!summaryLoading && !summaryError" [innerHTML]="summary | simpleMarkdown"></p>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="chat-card">
+    <div class="chat-title">Poser une question à l'agent</div>
+
+    <div class="chat-messages" *ngIf="messages.length; else emptyChat">
+      <div *ngFor="let msg of messages" class="chat-row" [ngClass]="msg.role">
+        <div class="avatar" *ngIf="msg.role === 'assistant'">
+          <svg viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
+        </div>
+        <div class="bubble" [innerHTML]="msg.content | simpleMarkdown"></div>
+      </div>
+
+      <div class="chat-row assistant" *ngIf="chatLoading">
+        <div class="avatar">
+          <svg viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
+        </div>
+        <div class="bubble typing">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+
+      <div #scrollAnchor></div>
+    </div>
+
+    <ng-template #emptyChat>
+      <div class="empty-chat">
+        <p>Pose une question sur les statistiques tickets, ou choisis une suggestion :</p>
+        <div class="suggestions">
+          <button *ngFor="let p of suggestedPrompts" (click)="sendPrompt(p)">{{ p }}</button>
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="chatError" class="alert alert-error">{{ chatError }}</div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="currentMessage"
+        (keyup.enter)="sendMessage()"
+        placeholder="Écris ta question..."
+        [disabled]="chatLoading"
+      />
+      <button class="send-btn" (click)="sendMessage()" [disabled]="chatLoading || !currentMessage.trim()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </section>
+</div>

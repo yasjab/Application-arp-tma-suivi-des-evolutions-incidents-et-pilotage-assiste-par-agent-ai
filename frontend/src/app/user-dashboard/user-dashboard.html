@@ -1,0 +1,81 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-card">
+
+    <div class="dashboard-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="dashboard-title">Tableau de bord</h1>
+    <p class="dashboard-subtitle">Bienvenue sur le portail ARP</p>
+
+    <div class="actions-grid">
+
+      <button class="action-btn teal" (click)="goToSuiviProduction()">
+        <div class="btn-icon-wrapper teal">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Suivi Production</span>
+          <span class="btn-desc">FC Livrées, DI Livrées...</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn primary" (click)="goToExport()">
+        <div class="btn-icon-wrapper primary">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Export PV Production</span>
+          <span class="btn-desc">Générer un fichier Excel</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn accent" (click)="goToProfile()">
+        <div class="btn-icon-wrapper accent">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Mon compte</span>
+          <span class="btn-desc">Modifier mes informations</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <button class="action-btn secondary" (click)="logout()">
+        <div class="btn-icon-wrapper secondary">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-label">Se déconnecter</span>
+          <span class="btn-desc">Fermer la session</span>
+        </div>
+        <svg class="btn-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+    </div>
+  </div>
+</div>

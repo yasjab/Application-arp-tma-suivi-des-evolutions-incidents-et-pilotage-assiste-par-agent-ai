@@ -1,0 +1,154 @@
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour
+    </button>
+    <div class="header-info">
+      <h1 class="page-title">Gestion des comptes</h1>
+      <p class="page-subtitle">Créer, modifier ou supprimer les comptes utilisateurs</p>
+    </div>
+    <div class="header-actions">
+      <div class="header-badge">{{ users.length }} compte(s)</div>
+      <button class="btn-new" (click)="openCreate()">
+        <svg viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Nouveau compte
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- Alerts globales -->
+    <div class="alert alert-error" *ngIf="errorMessage && !showForm">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      {{ errorMessage }}
+    </div>
+    <div class="alert alert-success" *ngIf="successMessage && !showForm">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ successMessage }}
+    </div>
+
+    <!-- Formulaire -->
+    <div class="form-card" *ngIf="showForm">
+      <div class="form-card-title">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        {{ editingId ? 'Modifier le compte' : 'Nouveau compte' }}
+      </div>
+
+      <div class="alert alert-error" *ngIf="errorMessage">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">Nom <span class="required">*</span></label>
+          <input class="form-input" [(ngModel)]="formName" placeholder="ex: Sedrati" />
+        </div>
+        <div class="field">
+          <label class="field-label">Prénom <span class="required">*</span></label>
+          <input class="form-input" [(ngModel)]="formFirstName" placeholder="ex: Salma" />
+        </div>
+        <div class="field">
+          <label class="field-label">Login <span class="required">*</span></label>
+          <input class="form-input" [(ngModel)]="formLogin"
+                 placeholder="ex: s.sedrati"
+                 [disabled]="!!editingId" />
+        </div>
+        <div class="field">
+          <label class="field-label">Email <span class="required">*</span></label>
+          <input class="form-input" type="email" [(ngModel)]="formEmail"
+                 placeholder="ex: s.sedrati@maroctelecom.ma" />
+        </div>
+        <div class="field">
+          <label class="field-label">Rôle <span class="required">*</span></label>
+          <select class="form-select" [(ngModel)]="formRole">
+            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button class="btn-cancel" (click)="cancelForm()">Annuler</button>
+        <button class="btn-save" (click)="saveUser()">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          {{ editingId ? 'Modifier' : 'Créer le compte' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="list-card">
+      <div class="empty-state" *ngIf="users.length === 0">
+        <svg viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
+        <p>Aucun compte enregistré</p>
+      </div>
+
+      <table class="users-table" *ngIf="users.length > 0">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Nom complet</th>
+          <th>Login</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Créé le</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let u of users; let i = index"
+            [class.editing]="editingId === u.id">
+          <td class="td-index">{{ i + 1 }}</td>
+          <td class="td-name">
+            <div class="user-avatar">{{ u.firstName.charAt(0) }}{{ u.name.charAt(0) }}</div>
+            <div class="user-info">
+              <span class="user-fullname">{{ u.firstName }} {{ u.name }}</span>
+            </div>
+          </td>
+          <td><span class="login-badge">{{ u.login }}</span></td>
+          <td class="td-email">{{ u.email }}</td>
+          <td>
+              <span class="role-badge" [class.admin]="u.role === 'ADMIN'"
+                    [class.user]="u.role === 'USER'">
+                {{ u.role }}
+              </span>
+          </td>
+          <td class="td-date">{{ formatDate(u.dateCreation) }}</td>
+          <td class="td-actions">
+            <button class="icon-btn edit" (click)="openEdit(u)" title="Modifier">
+              <svg viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Modifier
+            </button>
+            <button class="icon-btn delete" (click)="deleteUser(u.id, u.login)" title="Supprimer">
+              <svg viewBox="0 0 24 24">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+                <path d="M9 6V4h6v2"/>
+              </svg>
+              Supprimer
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

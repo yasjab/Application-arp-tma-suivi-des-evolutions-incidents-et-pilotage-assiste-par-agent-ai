@@ -1,0 +1,81 @@
+<div class="export-wrapper">
+  <div class="export-card">
+
+    <div class="card-header">
+      <h2 class="card-title">Export PV Production</h2>
+      <p class="card-subtitle">
+        Sélectionnez une ou plusieurs entités pour générer l'export Excel fusionné
+      </p>
+    </div>
+
+    <!-- Erreur -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Succès -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <svg viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ successMessage }}
+    </div>
+
+    <div class="section-label">Entités disponibles</div>
+
+    <!-- Tout sélectionner -->
+    <div class="select-all-row">
+      <label class="checkbox-item select-all">
+        <input
+          type="checkbox"
+          [checked]="allChecked"
+          (change)="toggleAll($any($event.target).checked)"
+        />
+        <span class="checkbox-box"></span>
+        <span class="checkbox-label">Tout sélectionner</span>
+      </label>
+    </div>
+
+    <!-- Liste des entités -->
+    <div class="entites-grid">
+      <label class="checkbox-item" *ngFor="let e of entites">
+        <input type="checkbox" [(ngModel)]="e.checked" [name]="e.nom" />
+        <span class="checkbox-box"></span>
+        <span class="checkbox-label">{{ e.nom }}</span>
+      </label>
+    </div>
+
+    <!-- Aucune entité -->
+    <div class="empty-state" *ngIf="entites.length === 0">
+      Aucune entité disponible.
+    </div>
+
+    <!-- Résumé -->
+    <div class="selection-summary" *ngIf="someChecked">
+      <span class="summary-icon">✓</span>
+      {{ selectedCount }} entité(s) sélectionnée(s) :
+      <strong>{{ selectedLabels }}</strong>
+    </div>
+
+    <!-- Bouton export -->
+    <button
+      class="btn-export"
+      (click)="export()"
+      [disabled]="loading || !someChecked"
+    >
+      <span class="btn-spinner" *ngIf="loading"></span>
+      <svg *ngIf="!loading" viewBox="0 0 24 24" class="btn-icon">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      {{ loading ? 'Génération en cours...' : 'Exporter en Excel' }}
+    </button>
+
+  </div>
+</div>
