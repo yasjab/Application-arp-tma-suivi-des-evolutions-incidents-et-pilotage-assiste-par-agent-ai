@@ -1,8 +1,9 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiAgentService, ChatMessage, TicketStatsDto } from '../services/ai-agent.service';
 import { SimpleMarkdownPipe } from '../pipes/simple-markdown.pipe';
+import { PostHogService } from '../services/posthog.service';
 
 @Component({
   selector: 'app-agent-ia',
@@ -12,6 +13,8 @@ import { SimpleMarkdownPipe } from '../pipes/simple-markdown.pipe';
   styleUrl: './agent-ia.scss'
 })
 export class AgentIaComponent implements OnInit, AfterViewChecked {
+  private readonly posthogService = inject(PostHogService);
+
   @ViewChild('scrollAnchor') scrollAnchor?: ElementRef<HTMLDivElement>;
 
   stats: TicketStatsDto[] = [];
@@ -78,10 +81,10 @@ export class AgentIaComponent implements OnInit, AfterViewChecked {
 
   sendPrompt(text: string): void {
     this.currentMessage = text;
-    this.sendMessage();
+    this.sendMessage('suggested');
   }
 
-  sendMessage(): void {
+  sendMessage(promptSource: 'suggested' | 'freeform' = 'freeform'): void {
     const text = this.currentMessage.trim();
     if (!text || this.chatLoading) return;
 
@@ -94,6 +97,9 @@ export class AgentIaComponent implements OnInit, AfterViewChecked {
     this.aiAgentService.chat(text, this.messages).subscribe({
       next: (res) => {
         this.messages.push({ role: 'assistant', content: res.message });
+        this.posthogService.posthog.capture('ai_response_received', {
+          prompt_source: promptSource,
+        });
         this.chatLoading = false;
         this.shouldScroll = true;
       },

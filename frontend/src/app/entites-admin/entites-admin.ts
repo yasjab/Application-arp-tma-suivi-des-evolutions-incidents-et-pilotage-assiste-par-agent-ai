@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntiteService } from '../services/entite.service';
 import { EntiteDto } from '../services/export.service';
+import { PostHogService } from '../services/posthog.service';
 
 @Component({
   selector: 'app-entites-admin',
@@ -13,6 +14,8 @@ import { EntiteDto } from '../services/export.service';
   styleUrls: ['./entites-admin.scss'],
 })
 export class EntitesAdminComponent implements OnInit {
+  private readonly posthogService = inject(PostHogService);
+
   entites: EntiteDto[] = [];
   formNom = '';
   editingId: number | null = null;
@@ -45,6 +48,7 @@ export class EntitesAdminComponent implements OnInit {
             this.entites = [...this.entites];  // force nouvelle référence
           }
           this.successMessage = `"${nom}" modifiée avec succès.`;
+          this.posthogService.posthog.capture('entity_updated');
           this.resetForm();
           this.cdr.detectChanges();  // ← force la détection
         },
@@ -55,6 +59,7 @@ export class EntitesAdminComponent implements OnInit {
         next: (created) => {
           this.entites = [...this.entites, { ...created }];
           this.successMessage = `"${nom}" ajoutée avec succès.`;
+          this.posthogService.posthog.capture('entity_created');
           this.resetForm();
           this.cdr.detectChanges();  // ← force la détection
         },
@@ -69,6 +74,7 @@ export class EntitesAdminComponent implements OnInit {
       next: () => {
         this.entites = this.entites.filter((e) => e.id !== id);
         this.successMessage = `"${nom}" supprimée.`;
+        this.posthogService.posthog.capture('entity_deleted');
         if (this.editingId === id) this.resetForm();
         this.cdr.detectChanges();  // ← force la détection
       },

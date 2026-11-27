@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService, UserDto, UserRequest } from '../services/user.service';
+import { PostHogService } from '../services/posthog.service';
 
 @Component({
   selector: 'app-users-admin',
@@ -12,6 +13,8 @@ import { UserService, UserDto, UserRequest } from '../services/user.service';
   styleUrls: ['./users-admin.scss'],
 })
 export class UsersAdminComponent implements OnInit {
+  private readonly posthogService = inject(PostHogService);
+
   users: UserDto[] = [];
   roles = ['ADMIN', 'USER'];
 
@@ -90,6 +93,9 @@ export class UsersAdminComponent implements OnInit {
           if (index !== -1) this.users[index] = { ...updated };
           this.users = [...this.users];
           this.successMessage = `Compte "${updated.login}" modifié avec succès.`;
+          this.posthogService.posthog.capture('user_account_updated', {
+            role: updated.role,
+          });
           this.showForm = false;
           this.resetForm();
           this.cdr.detectChanges();
@@ -101,6 +107,9 @@ export class UsersAdminComponent implements OnInit {
         next: (created) => {
           this.users = [...this.users, { ...created }];
           this.successMessage = `Compte "${created.login}" créé avec succès.`;
+          this.posthogService.posthog.capture('user_account_created', {
+            role: created.role,
+          });
           this.showForm = false;
           this.resetForm();
           this.cdr.detectChanges();
@@ -116,6 +125,7 @@ export class UsersAdminComponent implements OnInit {
       next: () => {
         this.users = this.users.filter((u) => u.id !== id);
         this.successMessage = `Compte "${login}" supprimé.`;
+        this.posthogService.posthog.capture('user_account_deleted');
         if (this.editingId === id) { this.showForm = false; this.resetForm(); }
         this.cdr.detectChanges();
       },

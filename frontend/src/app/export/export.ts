@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ExportService, EntiteDto } from '../services/export.service';
+import { PostHogService } from '../services/posthog.service';
 
 interface EntiteOption extends EntiteDto {
   checked: boolean;
@@ -16,6 +17,8 @@ interface EntiteOption extends EntiteDto {
   styleUrls: ['./export.scss'],
 })
 export class ExportComponent implements OnInit {
+  private readonly posthogService = inject(PostHogService);
+
   loading = false;
   errorMessage = '';
   successMessage = '';
@@ -79,6 +82,9 @@ export class ExportComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         this.loading = false;
         this.successMessage = 'Export téléchargé avec succès.';
+        this.posthogService.posthog.capture('export_completed', {
+          entity_count: selected.length,
+        });
       },
       error: () => {
         this.loading = false;
