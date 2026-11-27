@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { UserDto } from '../services/user.service';
+import { PostHogService } from '../services/posthog.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +14,8 @@ import { UserDto } from '../services/user.service';
   styleUrls: ['./profile.scss'],
 })
 export class ProfileComponent implements OnInit {
+  private readonly posthogService = inject(PostHogService);
+
   user!: UserDto;
 
   // Infos
@@ -76,6 +79,9 @@ export class ProfileComponent implements OnInit {
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
         this.savingInfos = false;
+        this.posthogService.posthog.capture('profile_updated', {
+          login_changed: loginChanged,
+        });
 
         if (loginChanged) {
           this.infosSuccess     = 'Login modifié avec succès. Veuillez vous reconnecter pour appliquer les changements.';
@@ -126,6 +132,7 @@ export class ProfileComponent implements OnInit {
         this.formNewPassword     = '';
         this.formConfirmPassword = '';
         this.savingPassword      = false;
+        this.posthogService.posthog.capture('password_updated');
         this.cdr.detectChanges();
       },
       error: () => {

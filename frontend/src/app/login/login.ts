@@ -1,8 +1,9 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth';
 import { Router } from '@angular/router';
+import { PostHogService } from '../services/posthog.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.scss'],
 })
 export class LoginComponent {
+  private readonly posthogService = inject(PostHogService);
+
   loginUser = '';
   password = '';
   errorMessage = '';
@@ -31,6 +34,8 @@ export class LoginComponent {
         else this.router.navigate(['/user-dashboard']);
       },
       error: () => {
+        this.posthogService.posthog.capture('login_failed');
+        this.posthogService.posthog.logger.warn('authentication_attempt_rejected');
         this.errorMessage = 'Identifiants invalides';
       },
     });
